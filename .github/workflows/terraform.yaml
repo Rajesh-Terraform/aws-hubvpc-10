@@ -5,8 +5,6 @@ on:
     branches:
       - main
 
-  
-
 permissions:
   id-token: write
   contents: read
@@ -21,13 +19,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Show Files
+        run: |
+          pwd
+          echo "Repository files:"
+          ls -la
+          echo "Terraform files:"
+          find . -type f -name "*.tf"
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume : arn:aws:iam::647132523867:role/github-actions-terraform-role-v1
+          role-to-assume: arn:aws:iam::647132523867:role/github-actions-terraform-role-v1
           aws-region: ap-south-1
 
       - name: Verify AWS identity
@@ -35,36 +41,17 @@ jobs:
           aws sts get-caller-identity
 
       - name: Terraform Init
-        working-directory: modules
-        run: terraform init 
+        run: terraform init
 
-       
-
-
-      - name: Show Files
-        run: |
-          pwd
-          ls -la
-          find . -name "*.tf"  
-
-     
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
 
       - name: Terraform Validate
-        working-directory: modules
         run: terraform validate
 
-      
-
       - name: Terraform Plan
-        working-directory: modules 
-        run: terraform plan
-
+        run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        working-directory: modules
-        run: terraform apply -auto-approve tfplan   
-       
-  
-
-
-
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve tfplan  
