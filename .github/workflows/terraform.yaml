@@ -41,15 +41,18 @@ jobs:
           aws sts get-caller-identity
 
       - name: Terraform Init
+        working-directory: main.tf
         run: terraform init
 
      
       - name: Terraform Validate
+        working-directory: main.tf
         run: terraform validate
 
       - name: Terraform Plan
+        working-directory: main.tf
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: main.tf
         run: terraform apply -auto-approve tfplan  
