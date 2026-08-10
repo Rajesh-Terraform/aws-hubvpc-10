@@ -41,18 +41,18 @@ jobs:
           aws sts get-caller-identity
 
       - name: Terraform Init
-        working-directory: main.tf
+        working-directory: /home/runner/work/aws-hubvpc-10/aws-hubvpc-10/
         run: terraform init
 
      
       - name: Terraform Validate
-        working-directory: main.tf
+        working-directory: /home/runner/work/aws-hubvpc-10/aws-hubvpc-10/
         run: terraform validate
 
       - name: Terraform Plan
-        working-directory: main.tf
+        working-directory: /home/runner/work/aws-hubvpc-10/aws-hubvpc-10/
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        working-directory: main.tf
+        working-directory: /home/runner/work/aws-hubvpc-10/aws-hubvpc-10/
         run: terraform apply -auto-approve tfplan  
