@@ -43,4 +43,4 @@ output "private_subnet_ids" {
 
 output "nat_gateway_ids" {
   value = module.hub_vpc.nat_gateway_ids
-}   
+}

@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "this" {
   }
 }
 
-resource "aws_subnet" "public1" {
+resource "aws_subnet" "public" {
   count = length(var.public_subnet_cidrs)
 
   vpc_id                  = aws_vpc.this.id
@@ -31,7 +31,7 @@ resource "aws_subnet" "public1" {
   }
 }
 
-resource "aws_subnet" "private1" {
+resource "aws_subnet" "private" {
   count = length(var.private_subnet_cidrs)
 
   vpc_id            = aws_vpc.this.id
@@ -113,8 +113,7 @@ resource "aws_route_table_association" "private" {
 
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
-}  
-
+}   
 
 
 module "hub_vpc" {
@@ -129,4 +128,4 @@ module "hub_vpc" {
   public_subnet_cidrs = var.public_subnet_cidrs
 
   private_subnet_cidrs = var.private_subnet_cidrs
-}     
+}
